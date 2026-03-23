@@ -1,9 +1,10 @@
 import { useState, useEffect, useContext } from "react";
 import "./App.css";
 import AddRecipe from "./components/AddRecipe";
-import axios from 'axios'
-import {type Recipe} from './models'
+import axios from "axios";
+import { type Recipe } from "./models";
 import { RecipeContext } from "./context/RecipeContext";
+import RecipeCard from "./components/RecipeCard";
 
 function App() {
   const ctx = useContext(RecipeContext);
@@ -15,12 +16,11 @@ function App() {
         ctx?.recipes &&
         ctx.recipes.map((recipe) => {
           return (
-            <div key={recipe.idMeal}>
-              <h2>{recipe.strMeal}</h2>
-              <p>
-                {recipe.strCategory} from area {recipe.strArea}
-              </p>
-            </div>
+            <RecipeCard
+              key={recipe.idMeal}
+              recipe={recipe}
+              onClick={(id) => console.log("clicked:", id)}
+            />
           );
         })}
       <AddRecipe />
