@@ -1,14 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import axios from "axios";
+import { RecipeContext } from "../context/RecipeContext";
 
-const AddRecipe = ({fetchRecipes}: {fetchRecipes: () =>Promise<void>}) => {
+const AddRecipe = () => {
     const [newRecipe, setNewRecipe] = useState({
     idMeal: "",
     strMeal: "",
     strCategory: "",
     strArea: "",
   });
+  const ctx = useContext(RecipeContext)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>("")
 
@@ -20,7 +22,6 @@ const AddRecipe = ({fetchRecipes}: {fetchRecipes: () =>Promise<void>}) => {
     } catch(err: any){
         setError(err)
     } finally{
-        fetchRecipes();
         setNewRecipe({
             idMeal:'',
             strMeal:'',
