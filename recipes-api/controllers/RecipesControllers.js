@@ -34,12 +34,13 @@ export const getRecipeById = (req, res) => {
 };
 
 export const createNewRecipe = (req, res) => {
+  console.log(req.body)
   const { idMeal, strMeal, strCategory, strArea } = req.body;
   if (!idMeal || !strMeal || !strCategory || !strArea) {
     return res.json("You need to provide all fields");
   }
   try {
-    recipesData.push(req.body);
+    recipesData.meals.push(req.body);
     return res.json(recipesData);
   } catch (err) {
     console.log(err);
