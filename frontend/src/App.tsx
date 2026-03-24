@@ -5,10 +5,11 @@ import axios from "axios";
 import { type Recipe } from "./models";
 import { RecipeContext } from "./context/RecipeContext";
 import RecipeCard from "./components/RecipeCard";
+import { useNavigate } from "react-router";
 
 function App() {
   const ctx = useContext(RecipeContext);
-
+  const navigate = useNavigate();
   return (
     <>
       <h1>Recipe App</h1>
@@ -19,7 +20,7 @@ function App() {
             <RecipeCard
               key={recipe.idMeal}
               recipe={recipe}
-              onClick={(id) => console.log("clicked:", id)}
+              onClick={(id) => navigate(`/api/recipes/${id}`)}
             />
           );
         })}
