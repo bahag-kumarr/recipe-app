@@ -8,9 +8,7 @@ import { RecipeProvider } from "./context/RecipeContext.tsx";
 createRoot(document.getElementById("root")!).render(
   <RecipeProvider>
     <BrowserRouter>
-      <StrictMode>
         <MyRouter />
-      </StrictMode>
     </BrowserRouter>
   </RecipeProvider>,
 );

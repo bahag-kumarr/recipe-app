@@ -1,15 +1,26 @@
 import { recipesData } from "../data/recipes-data.js";
+import pool from "../data/db.js";
 
 export const getAllRecipes = (req, res) => {
-  try {
-    if (!recipesData) {
-      return res.json(`No data available`);
-    }
-    return res.json(recipesData);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(`Internal server error`);
-  }
+  pool
+    .query(
+      `
+  SELECT 
+    id,
+    id_meal AS "idMeal",
+    str_meal AS "strMeal",
+    str_category AS "strCategory",
+    str_area AS "strArea"
+  FROM recipes
+`,
+    )
+    .then((data) => {
+      res.json(data.rows);
+    })
+    .catch((e) => {
+      console.log(e);
+      res.sendStatus(404);
+    });
 };
 
 export const getRecipeById = (req, res) => {
@@ -19,22 +30,41 @@ export const getRecipeById = (req, res) => {
   if (!recipeID) {
     return res.json("No recipe id given");
   }
-  try {
-    const findRecipeById = recipesData.meals.find(
-      recipe => recipe.idMeal === recipeID,
-    );
-    if (!findRecipeById) {
-      return res.json("No recipe with the given id found");
-    }
-    return res.json(findRecipeById);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(`Internal server error`);
-  }
+
+  pool
+    .query(
+      `SELECT 
+    id,
+    id_meal AS "idMeal",
+    str_meal AS "strMeal",
+    str_category AS "strCategory",
+    str_area AS "strArea",
+    str_meal_thumb as "strMealThumb"
+    FROM recipes 
+    WHERE id=$1`,
+      [recipeID],
+    )
+    .then((data) => res.json(data.rows))
+    .catch((e) => {
+      console.log(e);
+      res.sendStatus(500);
+    });
+  // try {
+  //   const findRecipeById = recipesData.meals.find(
+  //     (recipe) => recipe.idMeal === recipeID,
+  //   );
+  //   if (!findRecipeById) {
+  //     return res.json("No recipe with the given id found");
+  //   }
+  //   return res.json(findRecipeById);
+  // } catch (err) {
+  //   console.log(err);
+  //   res.status(500).json(`Internal server error`);
+  // }
 };
 
 export const createNewRecipe = (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   const { idMeal, strMeal, strCategory, strArea } = req.body;
   if (!idMeal || !strMeal || !strCategory || !strArea) {
     return res.json("You need to provide all fields");

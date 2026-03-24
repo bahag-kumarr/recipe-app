@@ -18,7 +18,7 @@ function App() {
         ctx.recipes.map((recipe) => {
           return (
             <RecipeCard
-              key={recipe.idMeal}
+              key={recipe.id}
               recipe={recipe}
               onClick={(id) => navigate(`/api/recipes/${id}`)}
             />

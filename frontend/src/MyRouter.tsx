@@ -5,8 +5,8 @@ const MyRouter = () => {
     return (
         <Routes>
             <Route path="/" element={<App />} />
-            <Route path='/api/recipes/:mealId' element={<RecipeDetails />}/>
-            <Route path='*' element={<h1>Page n ot fou d</h1>}/>
+            <Route path='/api/recipes/:id' element={<RecipeDetails />}/>
+            <Route path='*' element={<h1>Page not fou d</h1>}/>
         </Routes>
     );
 }

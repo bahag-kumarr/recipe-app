@@ -27,7 +27,7 @@ export const RecipeProvider = ({ children }: Props) => {
       const response = await axios.get(
         `${BASE_URL}/api/recipes`,
       );
-      const data: Recipe[] = response.data.meals;
+      const data: Recipe[] = response.data;
       console.log(response);
       setRecipes(data);
     } catch (err: any) {
