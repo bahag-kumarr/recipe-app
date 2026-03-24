@@ -21,7 +21,7 @@ function App() {
               key={recipe.id}
               recipe={recipe}
               onClick={(id) => navigate(`/api/recipes/${id}`)}
-            />
+            editFn={(id) => navigate(`/api/recipes/edit/${id}`)}/>
           );
         })}
       <AddRecipe />

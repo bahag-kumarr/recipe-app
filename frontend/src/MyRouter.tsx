@@ -6,7 +6,7 @@ const MyRouter = () => {
         <Routes>
             <Route path="/" element={<App />} />
             <Route path='/api/recipes/:id' element={<RecipeDetails />}/>
-            <Route path='*' element={<h1>Page not fou d</h1>}/>
+            <Route path='*' element={<h1>Page not found</h1>}/>
         </Routes>
     );
 }
