@@ -21,7 +21,9 @@ function App() {
               key={recipe.id}
               recipe={recipe}
               onClick={(id) => navigate(`/api/recipes/${id}`)}
-            editFn={(id) => navigate(`/api/recipes/edit/${id}`)}/>
+            editFn={(id) => { //TODO: Add maybe a new route or directly call the put endoint
+               
+            }}/>
           );
         })}
       <AddRecipe />
