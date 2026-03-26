@@ -1,94 +1,83 @@
-import { recipesData } from "../data/recipes-data.js";
-import pool from "../data/db.js";
+import Recipe from "../models/Recipe.js";
+import User from "../models/User.js";
 
-export const getAllRecipes = (req, res) => {
-  pool
-    .query(
-      `
-  SELECT 
-    id,
-    id_meal AS "idMeal",
-    str_meal AS "strMeal",
-    str_category AS "strCategory",
-    str_area AS "strArea"
-  FROM recipes
-`,
-    )
-    .then((data) => {
-      res.json(data.rows);
-    })
-    .catch((e) => {
-      console.log(e);
-      res.sendStatus(404);
-    });
-};
-
-export const getRecipeById = (req, res) => {
-  const recipeID = req.params.id;
-  console.log(req.params.id);
-  console.log(recipeID);
-  if (!recipeID) {
-    return res.json("No recipe id given");
-  }
-
-  pool
-    .query(
-      `SELECT 
-    id,
-    id_meal AS "idMeal",
-    str_meal AS "strMeal",
-    str_category AS "strCategory",
-    str_area AS "strArea",
-    str_meal_thumb as "strMealThumb"
-    FROM recipes 
-    WHERE id=$1`,
-      [recipeID],
-    )
-    .then((data) => res.json(data.rows))
-    .catch((e) => {
-      console.log(e);
-      res.sendStatus(500);
-    });
-};
-
-export const createNewRecipe = (req, res) => {
-  console.log(req.body);
-  const { idMeal, strMeal, strCategory, strArea } = req.body;
-  if (!idMeal || !strMeal || !strCategory || !strArea) {
-    return res.json("You need to provide all fields");
-  }
+export const getAllRecipes = async (req, res) => {
   try {
-    recipesData.meals.push(req.body);
-    return res.json(recipesData);
+    const recipes = await Recipe.findAll({
+      attributes: ["id", "name", "ingredients", "img", "category"],
+      include: [
+        {
+          model: User,
+          as: "author",
+          attributes: ["id", "firstName", "email"],
+        },
+      ],
+    });
+    if (recipes.length < 1) {
+      return res.status(404).json(`Recipes not found`);
+    }
+    return res.status(200).json(recipes);
+  } catch (err) {
+    return res.status(500).json(`Internal server error`);
+  }
+};
+
+export const createNewRecipe = async (req, res) => {
+  const { name, img, ingredients, category, userID } = req.body;
+  try {
+    const newRecipe = await Recipe.create({
+      name,
+      img,
+      ingredients,
+      category,
+      userID,
+    });
+    return res.status(201).json(newRecipe);
+  } catch (err) {
+    return res.status(500).json(`Internal server error`);
+  }
+};
+
+export const getRecipeById = async (req, res, recipeID) => {
+  console.log(recipeID);
+
+  const { id } = req.params;
+  try {
+    const recipe = await Recipe.findByPk(id, {
+      attributes: ["id", "name", "ingredients", "img", "category"],
+      include: [
+        {
+          model: User,
+          as: "author",
+          attributes: ["id", "firstName", "email"],
+        },
+      ],
+    });
+    if (!recipe) {
+      return res.status(404).json(`No recipe found with this ID`);
+    }
+    return res.status(200).json(recipe);
+  } catch (err) {
+    return res.status(500).json(`Internal server error`);
+  }
+};
+
+export const updateRecipeByID = async (req, res) => {
+  const { recipe } = req;
+  const { name, ingredients, img, category } = req.body;
+
+  try {
+    const updatedRecipe = await recipe.update({
+      name,
+      ingredients,
+      img,
+      category,
+      userID: recipe.author.id,
+    });
+    await updatedRecipe.save();
+    return res.status(200).json(updatedRecipe);
   } catch (err) {
     console.log(err);
-    res.status(500).json(`Internal server error`);
+    return res.status(500).json(`Internal server error`);
   }
 };
-
-export const updateRecipe = (req, res) =>{
-  console.log("updateRecipe called");
-  const id = req.params.id
-  const {strMeal} = req.body;
-  pool
-  .query(
-  ` Update recipes
-    Set  str_meal=$1
-    Where id=$2
-    Returning *;
-  `,[strMeal, id]
-  )
-  .then(data => res.status(201).json(data))
-  .catch(e => res.sendStatus(404))
-}
-
-
-export const deleteRecipe = (req,res) =>{
-  console.log("delete response called");
-  const id = req.params.id
-  pool
-  .query('Delete recipes Where id_meal=$1', [id])
-  .then(data => res.sendStatus(201).json(data))
-  .catch(e => res.sendStatus(404));
-
-}
