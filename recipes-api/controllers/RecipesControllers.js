@@ -49,18 +49,6 @@ export const getRecipeById = (req, res) => {
       console.log(e);
       res.sendStatus(500);
     });
-  // try {
-  //   const findRecipeById = recipesData.meals.find(
-  //     (recipe) => recipe.idMeal === recipeID,
-  //   );
-  //   if (!findRecipeById) {
-  //     return res.json("No recipe with the given id found");
-  //   }
-  //   return res.json(findRecipeById);
-  // } catch (err) {
-  //   console.log(err);
-  //   res.status(500).json(`Internal server error`);
-  // }
 };
 
 export const createNewRecipe = (req, res) => {
@@ -77,3 +65,30 @@ export const createNewRecipe = (req, res) => {
     res.status(500).json(`Internal server error`);
   }
 };
+
+export const updateRecipe = (req, res) =>{
+  console.log("updateRecipe called");
+  const id = req.params.id
+  const {strMeal} = req.body;
+  pool
+  .query(
+  ` Update recipes
+    Set  str_meal=$1
+    Where id=$2
+    Returning *;
+  `,[strMeal, id]
+  )
+  .then(data => res.status(201).json(data))
+  .catch(e => res.sendStatus(404))
+}
+
+
+export const deleteRecipe = (req,res) =>{
+  console.log("delete response called");
+  const id = req.params.id
+  pool
+  .query('Delete recipes Where id_meal=$1', [id])
+  .then(data => res.sendStatus(201).json(data))
+  .catch(e => res.sendStatus(404));
+
+}
