@@ -5,10 +5,11 @@ import { RecipeContext } from "../context/RecipeContext";
 
 const AddRecipe = () => {
   const [newRecipe, setNewRecipe] = useState({
-    idMeal: "",
-    strMeal: "",
-    strCategory: "",
-    strArea: "",
+    id: "",
+    name: "",
+    ingredients: "",
+    category: "",
+    area: "",
   });
   const ctx = useContext(RecipeContext);
   const [loading, setLoading] = useState<boolean>(false);
@@ -19,17 +20,18 @@ const AddRecipe = () => {
     try {
       const addNewRecipe = await axios.post(
         "http://localhost:3000/api/recipe",
-        newRecipe,
+        { ...newRecipe, id: Number(newRecipe.id) }
       );
       console.log(addNewRecipe);
     } catch (err: any) {
       setError(err);
     } finally {
       setNewRecipe({
-        idMeal: "",
-        strMeal: "",
-        strCategory: "",
-        strArea: "",
+        id: "",
+        name: "",
+        ingredients: "",
+        category: "",
+        area: "",
       });
     }
   };
@@ -39,36 +41,36 @@ const AddRecipe = () => {
         <input
           type="text"
           placeholder="ID"
-          value={newRecipe.idMeal}
+          value={newRecipe.id}
           onChange={(e) =>
-            setNewRecipe({ ...newRecipe, idMeal: e.target.value })
+            setNewRecipe({ ...newRecipe, id: e.target.value})
           }
           className="bg-gray-700 text-white px-3 py-2 rounded flex-1"
         />
         <input
           type="text"
           placeholder="Meal"
-          value={newRecipe.strMeal}
+          value={newRecipe.name}
           onChange={(e) =>
-            setNewRecipe({ ...newRecipe, strMeal: e.target.value })
+            setNewRecipe({ ...newRecipe, name: e.target.value })
           }
           className="bg-gray-700 text-white px-3 py-2 rounded flex-1"
         />
         <input
           type="text"
           placeholder="Category"
-          value={newRecipe.strCategory}
+          value={newRecipe.category}
           onChange={(e) =>
-            setNewRecipe({ ...newRecipe, strCategory: e.target.value })
+            setNewRecipe({ ...newRecipe, category: e.target.value })
           }
           className="bg-gray-700 text-white px-3 py-2 rounded flex-1"
         />
         <input
           type="text"
           placeholder="Area"
-          value={newRecipe.strArea}
+          value={newRecipe.area}
           onChange={(e) =>
-            setNewRecipe({ ...newRecipe, strArea: e.target.value })
+            setNewRecipe({ ...newRecipe, area: e.target.value })
           }
           className="bg-gray-700 text-white px-3 py-2 rounded flex-1"
         />

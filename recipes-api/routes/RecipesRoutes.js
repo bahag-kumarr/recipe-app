@@ -7,6 +7,7 @@ import {
 } from "../controllers/RecipesControllers.js";
 import { checkIfUserExist } from "../middlewares/checkIfUserExist.js";
 import { checkIfRecipeExist } from "../middlewares/checkIfRecipeExist.js";
+import { verifyToken } from "../middlewares/verifyToken.js";
 
 const RecipesRouter = Router();
 
@@ -123,7 +124,7 @@ RecipesRouter.get("/recipes/:id", getRecipeById);
  *       500:
  *         description: Internal server error
  */
-RecipesRouter.post("/recipe", checkIfUserExist, createNewRecipe);
+RecipesRouter.post("/recipe", verifyToken, createNewRecipe);
 
 /**
  * @swagger

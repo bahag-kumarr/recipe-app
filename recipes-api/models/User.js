@@ -18,6 +18,11 @@ const User = sequelize.define(`User`, {
       isEmail: true,
     },
   },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue:"",
+  },
   profilePicture: {
     type: DataTypes.STRING,
     allowNull: true,

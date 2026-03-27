@@ -4,7 +4,7 @@ import User from "../models/User.js";
 export const getAllRecipes = async (req, res) => {
   try {
     const recipes = await Recipe.findAll({
-      attributes: ["id", "name", "ingredients", "img", "category"],
+      attributes: ["id", "name", "ingredients", "img", "category", "area"],
       include: [
         {
           model: User,
@@ -23,7 +23,8 @@ export const getAllRecipes = async (req, res) => {
 };
 
 export const createNewRecipe = async (req, res) => {
-  const { name, img, ingredients, category, userID } = req.body;
+  const { name, img, ingredients, category } = req.body;
+  const userID = req.user.id;
   try {
     const newRecipe = await Recipe.create({
       name,

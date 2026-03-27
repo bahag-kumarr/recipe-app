@@ -12,14 +12,14 @@ interface Props {
 const RecipeCard = ({ recipe, onClick, editFn }: Props) => {
   return (
     <div className="flex items-center justify-between  border border-gray-600 rounded-lg p-4 m-2 cursor-pointer hover:bg-gray-800 transition-colors">
-      <div onClick={() => onClick(recipe.id)} className="cursor-pointer">
-        <h2 className="text-sm font-bold">{recipe.strMeal}</h2>
+      <div onClick={() => onClick(String(recipe.id))} className="cursor-pointer">
+        <h2 className="text-sm font-bold">{recipe.name}</h2>
         <p className="text-gray-400 text-sm">
-          {recipe.strCategory} from area {recipe.strArea}
+          {recipe.category} from area {recipe.area}
         </p>
       </div>
       <button
-        onClick={() => editFn(recipe.id)}
+        onClick={() => editFn(String(recipe.id))}
         className="p-2 hover:text-blue-400 transition-colors"
       >
         <svg

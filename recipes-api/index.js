@@ -3,6 +3,7 @@ import "dotenv/config";
 import RecipesRouter from "./routes/RecipesRoutes.js";
 import cors from "cors";
 import UsersRouter from "./routes/UserRoutes.js";
+import AuthRouter from "./routes/AuthRoutes.js";
 import { sequelize } from "./config/database.js";
 import { applyAssociations } from "./models/associations.js";
 import swaggerUi from "swagger-ui-express";
@@ -28,7 +29,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["./routes/RecipesRoutes.js", "./routes/UserRoutes.js"],
+  apis: ["./routes/RecipesRoutes.js", "./routes/UserRoutes.js", "./routes/AuthRoutes.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -44,7 +45,7 @@ app.get(`/`, (request, response) => {
   response.json("Welcome to my recipies API");
 });
 
-app.use("/api", RecipesRouter, UsersRouter);
+app.use("/api", RecipesRouter, UsersRouter, AuthRouter);
 
 app.listen(PORT, async () => {
   console.log("Server is listening on port 3000");

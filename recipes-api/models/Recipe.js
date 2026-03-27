@@ -18,6 +18,11 @@ const Recipe = sequelize.define(`Recipe`, {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  area: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: "Unknown",
+  }
 });
 
 export default Recipe;
